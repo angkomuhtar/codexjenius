@@ -4,7 +4,7 @@ import {Iconify} from 'react-native-iconify';
 
 const Headers = () => {
   return (
-    <View className="flex flex-row items-center justify-between p-4">
+    <View className="flex flex-row items-center justify-between p-4 bg-white">
       <Text className="font-bold text-3xl">Contacts</Text>
       <TouchableOpacity>
         <View className="px-4 py-2 rounded-full bg-blue-400 flex flex-row items-center space-x-2">

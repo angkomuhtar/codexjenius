@@ -13,16 +13,20 @@ import {
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import Home from './presentations/screen/home.screen';
+import {Provider} from 'react-redux';
+import store from './applications/utils/store';
 
 const Stack = createNativeStackNavigator();
 function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{headerShown: false}}>
-        <Stack.Screen name="home" component={Home} />
-        <Stack.Screen name="create" component={Home} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        <Stack.Navigator screenOptions={{headerShown: false}}>
+          <Stack.Screen name="home" component={Home} />
+          <Stack.Screen name="create" component={Home} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 }
 
