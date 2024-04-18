@@ -1,9 +1,10 @@
-import {View, Text, TextInput} from 'react-native';
+import {View, Text, TextInput, Platform} from 'react-native';
 import React, {useState} from 'react';
 import {Iconify} from 'react-native-iconify';
 
 const Input = ({label, error, ...props}) => {
   //   console.log(error);
+  const ios = Platform.OS == 'ios';
   const [focus, setFocus] = useState(false);
   return (
     <View className="mb-4">
@@ -11,7 +12,9 @@ const Input = ({label, error, ...props}) => {
         {label}
       </Text>
       <View
-        className={`py-4 px-4 flex-row items-center bg-gray-100 border space-x-2 ${
+        className={`${
+          ios ? 'py-2' : ''
+        } px-4 flex-row items-center bg-gray-100 border space-x-2 ${
           focus ? 'border-gray-400' : 'border-gray-100'
         }  rounded-md`}>
         <Iconify

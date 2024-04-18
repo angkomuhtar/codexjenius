@@ -8,6 +8,9 @@ import {
   FlatList,
   Image,
   RefreshControl,
+  Modal,
+  ActivityIndicator,
+  Platform,
 } from 'react-native';
 import React, {useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -22,6 +25,7 @@ import {navigate} from '../../applications/utils/rootNavigation';
 
 const Home = ({navigation}) => {
   const [text, setText] = useState('');
+  const ios = Platform.OS == 'ios';
 
   const onChangeText = a => {
     setText(a);
@@ -39,36 +43,43 @@ const Home = ({navigation}) => {
     return (
       <View
         key={item.id}
-        className="mx-4 mb-3 p-2 rounded-md shadow-sm bg-white">
-        <TouchableOpacity>
-          <View className="flex-row items-center space-x-5">
-            <Image
-              source={{
-                uri:
-                  item.photo == 'N/A' ||
-                  item?.photo == '' ||
-                  !item.photo.startsWith('http')
-                    ? `https://ui-avatars.com/api/?name=${item.firstName} ${item.lastName}&background=0f766e&color=fff`
-                    : item.photo,
-              }}
-              className="h-12 aspect-square rounded-full border border-gray-200 object-contain"
-            />
-            <View className="flex-1">
-              <Text className="justify-center font-semibold capitalize text-sm">
-                {item.firstName} {item.lastName}
-              </Text>
-              <Text className="text-xs font-semibold text-gray-500">
-                {item.age} years old
-              </Text>
-            </View>
+        className={`mx-4 mb-3 p-2 rounded-md ${
+          ios ? 'shadow-sm' : 'border border-gray-200'
+        } bg-white`}>
+        <View className="flex-row items-center space-x-5">
+          <Image
+            source={{
+              uri:
+                item.photo == 'N/A' ||
+                item?.photo == '' ||
+                !item.photo.startsWith('http')
+                  ? `https://ui-avatars.com/api/?name=${item.firstName} ${item.lastName}&background=0f766e&color=fff`
+                  : item.photo,
+            }}
+            className="h-12 aspect-square rounded-full border border-gray-200 object-contain"
+          />
+          <View className="flex-1">
+            <Text className="justify-center font-semibold capitalize text-sm">
+              {item.firstName} {item.lastName}
+            </Text>
+            <Text className="text-xs font-semibold text-gray-500">
+              {item.age} years old
+            </Text>
           </View>
-        </TouchableOpacity>
+        </View>
       </View>
     );
   };
 
   return (
     <SafeAreaView>
+      <Modal visible={isLoading} transparent={true} animationType="slide">
+        <View className="absolute h-screen w-full bg-black/50 items-center justify-center">
+          <ActivityIndicator size="large" color="#fff" />
+          <Text className="font-bold text-lg mt-2 text-white">Loading</Text>
+        </View>
+      </Modal>
+
       <StatusBar barStyle="default" />
       <Headers
         title={'Contacts'}
@@ -84,7 +95,10 @@ const Home = ({navigation}) => {
         }
       />
       <View className="space-y-4 h-full bg-white pb-32">
-        <View className="flex-row items-center bg-gray-200 rounded-md px-4 py-2 mx-4">
+        <View
+          className={`flex-row items-center bg-gray-200 rounded-md px-4 ${
+            ios && 'py-2'
+          } mx-4`}>
           <TextInput
             onChangeText={onChangeText}
             value={text}
