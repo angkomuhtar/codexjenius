@@ -1,52 +1,47 @@
-import {createApi} from '@reduxjs/toolkit/query/react';
-import axiosBaseQuery from './services';
+import {baseService} from './services';
 
-export const contactService = createApi({
-  reducerPath: 'contactService',
-  baseQuery: axiosBaseQuery(),
-  tagTypes: ['Contacts'],
+export const contactService = baseService.injectEndpoints({
   endpoints: builder => ({
-    fetchContact: builder.query({
-      query: () => ({
-        url: '/contact',
-        method: 'get',
-      }),
-      transformResponse: responseData => {
-        return responseData?.data;
-      },
-      providesTags: ['Contacts'], // provide unique name in which this unique key is used for invalidation
-    }),
-    editContact: builder.query({
-      query: id => ({
-        url: `/contact/${id}`,
-        method: 'get',
-      }),
+    getContact: builder.query({
+      query: () => '/contact',
       transformResponse: responseData => {
         return responseData.data;
       },
-      providesTags: ['Contacts'], // provide unique name in which this unique key is used for invalidation
+      providesTags: ['Contact'],
     }),
-    updateContact: builder.mutation({
-      query: ({id, ...formData}) => ({
-        url: `/contact/${id}`,
-        method: 'put',
-        data: formData,
-      }),
-      invalidatesTags: ['Contacts'], // Invalidate fetchJokes on mutation success
+    deleteContact: builder.mutation({
+      query: ({id}) => ({url: `/contact/${id}`, method: 'delete'}),
+      invalidatesTags: ['Contact'],
     }),
     storeContact: builder.mutation({
-      query: formData => ({
-        url: '/contact',
+      query: data => ({
+        url: `/contact`,
         method: 'post',
-        data: formData,
+        body: data,
       }),
-      invalidatesTags: ['Contacts'], // Invalidate fetchJokes on mutation success
+      invalidatesTags: ['Contact'],
+    }),
+    editContact: builder.query({
+      query: id => ({url: `/contact/${id}`, method: 'get'}),
+      transformResponse: responseData => {
+        return responseData.data;
+      },
+    }),
+    updateContact: builder.mutation({
+      query: ({id, ...data}) => ({
+        url: `/contact/${id}`,
+        method: 'put',
+        body: data,
+      }),
+      invalidatesTags: ['Contact'],
     }),
   }),
 });
 
 export const {
-  useFetchContactQuery,
-  useUpdateContactMutation,
+  useGetContactQuery,
+  useDeleteContactMutation,
+  useEditContactQuery,
   useStoreContactMutation,
+  useUpdateContactMutation,
 } = contactService;

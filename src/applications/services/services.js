@@ -1,21 +1,15 @@
-import axiosInstance from '../utils/interceptor';
+import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 
-const axiosBaseQuery =
-  ({baseUrl} = {baseUrl: ''}) =>
-  async ({url, method, data, params, headers, body}) => {
-    try {
-      const result = await axiosInstance({
-        url: baseUrl + url,
-        method,
-        data,
-        params,
-        headers,
-        body,
-      });
-      return Promise.resolve(result);
-    } catch (axiosError) {
-      return Promise.reject(axiosError?.response?.data); // Should return in this format only, becasuse in order to populate error from axios interceptor "return response.data"
-    }
-  };
+const baseQuery = fetchBaseQuery({
+  baseUrl: 'https://contact.herokuapp.com/',
+  credentials: 'include',
+  prepareHeaders: (headers, {getState}) => {
+    return headers;
+  },
+});
 
-export default axiosBaseQuery;
+export const baseService = createApi({
+  baseQuery: baseQuery,
+  tagTypes: ['Contact'],
+  endpoints: builder => ({}),
+});

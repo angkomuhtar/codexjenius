@@ -1,7 +1,8 @@
 import {configureStore} from '@reduxjs/toolkit';
 import {contactService} from '../services/contact';
+import {setupListeners} from '@reduxjs/toolkit/query';
 
-const store = configureStore({
+export const store = configureStore({
   reducer: {
     [contactService.reducerPath]: contactService.reducer,
   },
@@ -9,4 +10,5 @@ const store = configureStore({
     getDefaultMiddleware().concat(contactService.middleware),
 });
 
-export default store;
+setupListeners(store.dispatch);
+// export default store;
